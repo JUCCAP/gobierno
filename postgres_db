@@ -1,0 +1,502 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.4
+-- Dumped by pg_dump version 9.5.4
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: postgres; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON DATABASE postgres IS 'default administrative connection database';
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: actividades; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE actividades (
+    id integer NOT NULL,
+    actividad character(128) NOT NULL,
+    proceso integer,
+    factor_critico integer,
+    cumplido boolean DEFAULT false,
+    descripcion character(300)
+);
+
+
+ALTER TABLE actividades OWNER TO postgres;
+
+--
+-- Name: actividades_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE actividades_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE actividades_id_seq OWNER TO postgres;
+
+--
+-- Name: actividades_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE actividades_id_seq OWNED BY actividades.id;
+
+
+--
+-- Name: miembros_grupo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE miembros_grupo (
+    id integer NOT NULL,
+    rol integer,
+    proceso integer
+);
+
+
+ALTER TABLE miembros_grupo OWNER TO postgres;
+
+--
+-- Name: miembros_grupo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE miembros_grupo_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE miembros_grupo_id_seq OWNER TO postgres;
+
+--
+-- Name: miembros_grupo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE miembros_grupo_id_seq OWNED BY miembros_grupo.id;
+
+
+--
+-- Name: news; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE news (
+    id integer NOT NULL,
+    title character(128) NOT NULL,
+    slug character(128) NOT NULL,
+    text text NOT NULL
+);
+
+
+ALTER TABLE news OWNER TO postgres;
+
+--
+-- Name: news_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE news_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE news_id_seq OWNER TO postgres;
+
+--
+-- Name: news_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE news_id_seq OWNED BY news.id;
+
+
+--
+-- Name: proceso; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE proceso (
+    id integer NOT NULL,
+    nombre character(128) NOT NULL,
+    fecha_inicio date,
+    fecha_fin date,
+    duracion integer,
+    inversion integer,
+    riesgo integer,
+    alineacion integer,
+    categoria character(30)
+);
+
+
+ALTER TABLE proceso OWNER TO postgres;
+
+--
+-- Name: proceso_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE proceso_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE proceso_id_seq OWNER TO postgres;
+
+--
+-- Name: proceso_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE proceso_id_seq OWNED BY proceso.id;
+
+
+--
+-- Name: reglas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE reglas (
+    id integer NOT NULL,
+    regla character(128) NOT NULL,
+    proceso integer,
+    cumplido boolean DEFAULT false,
+    descripcion character(300)
+);
+
+
+ALTER TABLE reglas OWNER TO postgres;
+
+--
+-- Name: reglas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE reglas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE reglas_id_seq OWNER TO postgres;
+
+--
+-- Name: reglas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE reglas_id_seq OWNED BY reglas.id;
+
+
+--
+-- Name: roles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE roles (
+    id integer NOT NULL,
+    tipo integer NOT NULL,
+    proceso integer,
+    a_paterno character(50),
+    a_materno character(50),
+    nombre character(100) NOT NULL,
+    cargo character(50),
+    correo character(100)
+);
+
+
+ALTER TABLE roles OWNER TO postgres;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE roles_id_seq OWNER TO postgres;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE roles_id_seq OWNED BY roles.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY actividades ALTER COLUMN id SET DEFAULT nextval('actividades_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY miembros_grupo ALTER COLUMN id SET DEFAULT nextval('miembros_grupo_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY news ALTER COLUMN id SET DEFAULT nextval('news_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY proceso ALTER COLUMN id SET DEFAULT nextval('proceso_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY reglas ALTER COLUMN id SET DEFAULT nextval('reglas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY roles ALTER COLUMN id SET DEFAULT nextval('roles_id_seq'::regclass);
+
+
+--
+-- Data for Name: actividades; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY actividades (id, actividad, proceso, factor_critico, cumplido, descripcion) FROM stdin;
+\.
+
+
+--
+-- Name: actividades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('actividades_id_seq', 1, false);
+
+
+--
+-- Data for Name: miembros_grupo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY miembros_grupo (id, rol, proceso) FROM stdin;
+\.
+
+
+--
+-- Name: miembros_grupo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('miembros_grupo_id_seq', 1, false);
+
+
+--
+-- Data for Name: news; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY news (id, title, slug, text) FROM stdin;
+1	test                                                                                                                            	http://google.com                                                                                                               	Esta es una prueba
+\.
+
+
+--
+-- Name: news_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('news_id_seq', 1, true);
+
+
+--
+-- Data for Name: proceso; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY proceso (id, nombre, fecha_inicio, fecha_fin, duracion, inversion, riesgo, alineacion, categoria) FROM stdin;
+1	test                                                                                                                            	\N	\N	\N	\N	\N	\N	\N
+2	prueba                                                                                                                          	2016-09-05	2016-09-06	5	3000	3	2	prueba                        
+3	test                                                                                                                            	2016-09-06	2016-09-15	\N	5000	4	3	test                          
+4	otro                                                                                                                            	2016-09-06	2016-09-08	\N	34443	3	2	Desc                          
+\.
+
+
+--
+-- Name: proceso_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('proceso_id_seq', 4, true);
+
+
+--
+-- Data for Name: reglas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY reglas (id, regla, proceso, cumplido, descripcion) FROM stdin;
+\.
+
+
+--
+-- Name: reglas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('reglas_id_seq', 1, false);
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY roles (id, tipo, proceso, a_paterno, a_materno, nombre, cargo, correo) FROM stdin;
+\.
+
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('roles_id_seq', 1, false);
+
+
+--
+-- Name: actividades_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY actividades
+    ADD CONSTRAINT actividades_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: miembros_grupo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY miembros_grupo
+    ADD CONSTRAINT miembros_grupo_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: news_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY news
+    ADD CONSTRAINT news_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: proceso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY proceso
+    ADD CONSTRAINT proceso_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reglas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY reglas
+    ADD CONSTRAINT reglas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: actividades_proceso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY actividades
+    ADD CONSTRAINT actividades_proceso_fkey FOREIGN KEY (proceso) REFERENCES proceso(id);
+
+
+--
+-- Name: miembros_grupo_proceso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY miembros_grupo
+    ADD CONSTRAINT miembros_grupo_proceso_fkey FOREIGN KEY (proceso) REFERENCES proceso(id);
+
+
+--
+-- Name: miembros_grupo_rol_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY miembros_grupo
+    ADD CONSTRAINT miembros_grupo_rol_fkey FOREIGN KEY (rol) REFERENCES roles(id);
+
+
+--
+-- Name: reglas_proceso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY reglas
+    ADD CONSTRAINT reglas_proceso_fkey FOREIGN KEY (proceso) REFERENCES proceso(id);
+
+
+--
+-- Name: roles_proceso_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY roles
+    ADD CONSTRAINT roles_proceso_fkey FOREIGN KEY (proceso) REFERENCES proceso(id);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
