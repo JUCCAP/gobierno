@@ -34,7 +34,11 @@
       <p>Presupuesto Estimado</p>
       <p style="color:#217c40;">$0.00</p>
     </div>
-    <?php $con = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=gobierno"); ?>
+    <?php $con = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=gobierno");
+    if(!$con){
+      echo "Error de conexión.\n";
+      exit;
+    }?>
     <table class="proyectos">
       <tr>
         <th>Proyecto Estrategico</th>

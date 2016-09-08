@@ -22,7 +22,11 @@
       Ingreso de Nuevo Proyecto
     </div>
     <div class="info">
-      <?php $con = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=gobierno"); ?>
+      <?php $con = pg_connect("host=localhost port=5432 dbname=postgres user=postgres password=gobierno");
+      if(!$con){
+        echo "Error de conexión.\n";
+        exit;
+      } ?>
       <?php
         if(isset($_POST['nombre'])) {
           $nombre = sanitizeString($_POST['nombre']);
@@ -48,7 +52,7 @@
 
         $query = "INSERT INTO Proceso (nombre,fecha_inicio,fecha_fin,inversion,riesgo,alineacion,categoria) VALUES ('$nombre','$fecha_inicio','$fecha_fin','$inversion','$riesgo','$alineacion','$categoria')";
 
-        $result = pg_query($con,$query) or die ("Error al ingresar datos");
+        $result = pg_query($con,$query) or die echo("Error al ingresar datos");
 
         echo '<p>Ingresado correctamente</p>';
        ?>
